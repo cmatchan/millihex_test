@@ -24,7 +24,7 @@
 
 
   <!-- Base and Torso Definition -->
-  <xacro:macro name="millihex_torso" params="">
+  <xacro:macro name="millihex_torso" params="color">
     <link name="base_link">
     </link>
 
@@ -41,13 +41,21 @@
         </geometry>
       </collision>
       <visual>
-        <origin rpy="0 0 0" xyz="0 0 0"/>
+        <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
           <box size="${torso_x} ${torso_y} ${pcb_thickness_z}" />
         </geometry>
       </visual>
     </link>
-    <!-- TODO: insert torso frictions -->
+
+    <gazebo reference="torso">
+      <kp>${foot_kp}</kp>
+      <kd>${foot_kd}</kd>
+      <mu1>${foot_mu1}</mu1>
+      <mu2>${foot_mu2}</mu2>
+      <material>Gazebo/${color}</material>
+    </gazebo>
+
     <joint name="base_joint" type="fixed">
         <parent link="base_link"/>
         <child link="torso"/>
@@ -56,7 +64,7 @@
 
 
   <!-- Leg Link Definition -->
-  <xacro:macro name="millihex_leg_link" params="leg_number link_number x_length y_length">
+  <xacro:macro name="millihex_leg_link" params="leg_number link_number x_length y_length color">
     <link name="leg${leg_number}_link${link_number}">
       <inertial>
         <origin xyz="0 0 ${pcb_thickness_z / 2}" rpy="0 0 0" />
@@ -70,13 +78,20 @@
         </geometry>
       </collision>
       <visual>
-        <origin rpy="0 0 0" xyz="0 0 0"/>
+        <origin xyz="-${x_length / 2} -${y_length / 2} 0" rpy="0 0 0" />
         <geometry>
           <box size="${x_length} ${y_length} ${pcb_thickness_z}" />
         </geometry>
       </visual>
     </link>
-    <!-- TODO: insert link frictions -->
+
+    <gazebo reference="leg${leg_number}_link${link_number}">
+      <kp>${foot_kp}</kp>
+      <kd>${foot_kd}</kd>
+      <mu1>${foot_mu1}</mu1>
+      <mu2>${foot_mu2}</mu2>
+      <material>Gazebo/${color}</material>
+    </gazebo>
   </xacro:macro>
 
 
@@ -99,18 +114,22 @@
   <xacro:macro name="millihex_leg" params="leg_number">
     <!-- link 1 (shoulder link), horizontally oriented -->
     <xacro:millihex_leg_link leg_number="${leg_number}" link_number="1"
-                             x_length="${leg_link_x}" y_length="${leg_link_y}" />
+                             x_length="${leg_link_x}" y_length="${leg_link_y}"
+                             color="Black" />
 
     <!-- link 2, vertically oriented -->
     <xacro:millihex_leg_link leg_number="${leg_number}" link_number="2"
-                             x_length="${leg_link_y}" y_length="${leg_link_x}" />
+                             x_length="${leg_link_y}" y_length="${leg_link_x}" 
+                             color="Orange" />
+
     <joint name="leg${leg_number}_joint2" type="revolute">
       <parent link="leg${leg_number}_link1" />
       <child link="leg${leg_number}_link2" />
-      <origin xyz="0 -${leg_link_x / 2 + leg_link_y / 2} 0" rpy="0 0 0" />
+      <origin xyz="0 -${leg_link_y} 0" rpy="0 0 0" />
       <limit lower="-1.5708" upper="1.5708" effort="1" velocity="1"/>
-      <axis xyz="1 0 0" />
+      <axis xyz="0 1 0" />
     </joint>
+
     <xacro:leg_transmission leg_number="${leg_number}" joint_number="2" />
 
     <!-- TODO: link 3, horizontally oriented -->
@@ -122,7 +141,7 @@
 
   <!-- Assemble Body -->
   <xacro:macro name="millihex_body" params="">
-    <xacro:millihex_torso />
+    <xacro:millihex_torso color="Orange" />
     <xacro:millihex_leg leg_number="1" />
 
     <joint name="leg1_joint1" type="fixed">
