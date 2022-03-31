@@ -107,7 +107,7 @@
     <joint name="leg${leg_number}_joint2" type="revolute">
       <parent link="leg${leg_number}_link1" />
       <child link="leg${leg_number}_link2" />
-      <origin xyz="-${leg_link_y} 0 0" rpy="0 0 0" />
+      <origin xyz="0 -${leg_link_x / 2 + leg_link_y / 2} 0" rpy="0 0 0" />
       <limit lower="-1.5708" upper="1.5708" effort="1" velocity="1"/>
       <axis xyz="1 0 0" />
     </joint>
@@ -128,7 +128,7 @@
     <joint name="leg1_joint1" type="fixed">
       <parent link="torso" />
       <child link="leg1_link1" />
-      <origin xyz="${torso_x / 2} ${torso_y / 2} 0" rpy="0 0 0" />
+      <origin xyz="${torso_x / 2} -${torso_y / 2} 0" rpy="0 0 0" />
     </joint>
 
   </xacro:macro>
