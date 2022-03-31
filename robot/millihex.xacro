@@ -20,7 +20,7 @@
     <color rgba="0 0 0 1"/>
   </material>
   <material name="Orange">
-    <color rgba="0.945 0.35 0.133 1"/>
+    <color rgba="0.98 0.41 0.055 1"/>
   </material>
 
 
@@ -137,7 +137,7 @@
       <parent link="leg${leg_number}_link1" />
       <child link="leg${leg_number}_link2" />
       <origin xyz="0 -${leg_link_y} 0" rpy="0 0 0" />
-      <limit lower="-1.5708" upper="1.5708" effort="1" velocity="1"/>
+      <limit lower="-1.5708" upper="1.5708" effort="0.01" velocity="0.0001"/>
       <axis xyz="1 0 0" />
     </joint>
 
