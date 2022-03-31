@@ -6,8 +6,8 @@
   <xacro:property name="torso_x" value="0.14" />
   <xacro:property name="torso_y" value="0.04" />
   <xacro:property name="leg_link_mass" value="0.0008" />
-  <xacro:property name="leg_link_x" value="0.03" />
-  <xacro:property name="leg_link_y" value="0.02" />
+  <xacro:property name="leg_link_x" value="0.02" />
+  <xacro:property name="leg_link_y" value="0.03" />
   <xacro:property name="pcb_thickness_z" value="0.0005" />
 	<xacro:property name="foot_kp" value="1000.0" />
 	<xacro:property name="foot_kd" value="1000.0" />
@@ -61,7 +61,7 @@
       <inertial>
         <origin xyz="0 0 ${pcb_thickness_z / 2}" rpy="0 0 0" />
         <mass value="${leg_link_mass}" />
-        <xacro:box_inertia mass="0.0008" x="${x_length}" y="${y_length}" z="${pcb_thickness_z}" />
+        <xacro:box_inertia mass="${leg_link_mass}" x="${x_length}" y="${y_length}" z="${pcb_thickness_z}" />
       </inertial>
       <collision>
         <origin xyz="0 0 ${pcb_thickness_z / 2}" rpy="0 0 0"/>
@@ -97,28 +97,40 @@
   
   <!-- Assemble Leg -->
   <xacro:macro name="millihex_leg" params="leg_number">
-    <xacro:millihex_leg_link leg_number="" joint_number="" />
-    
-    <joint name="leg${leg_number}_joint" type="fixed">
-      <parent link="lowerleg_M${number}_link"/>
-      <child link="footM${number}_link"/>
-      <origin xyz="0 0 0.06" rpy="0 0 0"/>
-    </joint>
+    <!-- link 1 (shoulder link), horizontally oriented -->
+    <xacro:millihex_leg_link leg_number="${leg_number}" link_number="1"
+                             x_length="${leg_link_x}" y_length="${leg_link_y}" />
 
-    <joint name="leg1_joint1" type="revolute">
-      <parent link="torso" />
-      <child link="leg1_link1" />
-      <origin xyz="0.08333333 -0.05 0" rpy="0 0 0" />
+    <!-- link 2, vertically oriented -->
+    <xacro:millihex_leg_link leg_number="${leg_number}" link_number="2"
+                             x_length="${leg_link_y}" y_length="${leg_link_x}" />
+    <joint name="leg${leg_number}_joint2" type="revolute">
+      <parent link="leg${leg_number}_link1" />
+      <child link="leg${leg_number}_link2" />
+      <origin xyz="-${leg_link_y} 0 0" rpy="0 0 0" />
       <limit lower="-1.5708" upper="1.5708" effort="1" velocity="1"/>
       <axis xyz="1 0 0" />
     </joint>
+    <xacro:leg_transmission leg_number="${leg_number}" joint_number="2" />
+
+    <!-- TODO: link 3, horizontally oriented -->
+
+    <!-- TODO: link 4, horizontally oriented -->
 
   </xacro:macro>
 
 
   <!-- Assemble Body -->
-  <xacro:macro name="millihex_body" params="leg_number joint_number">
+  <xacro:macro name="millihex_body" params="">
     <xacro:millihex_torso />
+    <xacro:millihex_leg leg_number="1" />
+    
+    <joint name="leg1_joint1" type="fixed">
+      <parent link="torso" />
+      <child link="leg1_link1" />
+      <origin xyz="${torso_x / 2} ${torso_y / 2} 0" rpy="0 0 0" />
+    </joint>
+
   </xacro:macro>
 
 
@@ -134,7 +146,7 @@
 
   <!-- Build Robot by Filling in Macro Parameters -->
   <xacro:millihex_torso />
-
+  <xacro:millihex_body />
 
   <xacro:millihex_control namespace="millihex" />
 
