@@ -1,0 +1,98 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="millihex">
+
+  <!-- Properties -->
+	<xacro:property name="foot_kp" value="1000.0"/>
+	<xacro:property name="foot_kd" value="1000.0"/>
+	<xacro:property name="foot_mu1" value="10.0"/>
+  <xacro:property name="foot_mu2" value="10.0"/>
+
+
+  <!-- Useful Math MACROS-->
+
+  <!-- Calculate Moment of Inertia of Box -->
+  <xacro:macro name="box_inertia" params="mass x y z">
+    <inertia ixx="${mass*(y*y+z*z)/12}" ixy = "0" ixz = "0"
+             iyy="${mass*(x*x+z*z)/12}" iyz = "0"
+             izz="${mass*(x*x+z*z)/12}" />
+  </xacro:macro>
+
+
+  <!-- Base and Torso Definition -->
+  <xacro:macro name="millihex_torso" params="">
+    <link name="base_link">
+    </link>
+
+    <link name="torso">
+      <inertial>
+        <origin xyz="0 0 0.00025" rpy="0 0 0" />
+        <mass value="0.01" />
+        <xacro:box_inertia mass="0.01" x="0.14" y="0.04" z="0.0005" />
+      </inertial>
+      <collision>
+        <origin xyz="0 0 0.00025" rpy="0 0 0"/>
+        <geometry>
+          <box size="0.14 0.04 0.0005" />
+        </geometry>
+      </collision>
+      <visual>
+        <origin rpy="0.0 0 0" xyz="0 0 0"/>
+        <geometry>
+          <box size="0.14 0.04 0.0005" />
+        </geometry>
+      </visual>
+    </link>
+
+    <gazebo reference="head_link">
+        <mu1>10.0</mu1>
+        <mu2>10.0</mu2>
+    </gazebo>
+
+    <joint name="base_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="torso"/>
+    </joint>
+  </xacro:macro>
+
+
+  <!-- Leg Definition -->
+  <xacro:macro name="shoulder" params="number">
+    <link name="shoulder${number}">
+      <inertial>
+        <origin xyz="0 0 0.00025" rpy="0 0 0" />
+        <mass value="0.01" />
+        <xacro:box_inertia mass="0.0008" x="0.03" y="0.02" z="0.0005" />
+      </inertial>
+      <collision>
+        <origin xyz="0 0 0.00025" rpy="0 0 0"/>
+        <geometry>
+          <box size="0.14 0.04 0.0005" />
+        </geometry>
+      </collision>
+      <visual>
+        <origin rpy="0.0 0 0" xyz="0 0 0"/>
+        <geometry>
+          <box size="0.14 0.04 0.0005" />
+        </geometry>
+      </visual>
+    </link>
+  </xacro:macro>
+
+
+  <!-- Add Control -->
+  <xacro:macro name="millihex_control" params="namespace">
+      <gazebo>
+          <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+              <robotNamespace>/${namespace}</robotNamespace>
+          </plugin>
+      </gazebo>
+  </xacro:macro>
+  
+
+  <!-- Build Robot by Filling in Macro Parameters -->
+  <xacro:millihex_torso />
+
+
+  <xacro:millihex_control namespace="millihex" />
+
+</robot>
