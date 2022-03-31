@@ -32,18 +32,18 @@
       <inertial>
         <origin xyz="0 0 ${pcb_thickness_z / 2}" rpy="0 0 0" />
         <mass value="${torso_mass}" />
-        <xacro:box_inertia mass="${torso_mass}" x="0.14" y="0.04" z="0.0005" />
+        <xacro:box_inertia mass="${torso_mass}" x="${torso_x}" y="${torso_y}" z="${pcb_thickness_z}" />
       </inertial>
       <collision>
-        <origin xyz="0 0 0.00025" rpy="0 0 0"/>
+        <origin xyz="0 0 ${pcb_thickness_z / 2}" rpy="0 0 0"/>
         <geometry>
-          <box size="0.14 0.04 0.0005" />
+          <box size="${torso_x} ${torso_y} ${pcb_thickness_z}" />
         </geometry>
       </collision>
       <visual>
-        <origin rpy="0.0 0 0" xyz="0 0 0"/>
+        <origin rpy="0 0 0" xyz="0 0 0"/>
         <geometry>
-          <box size="0.14 0.04 0.0005" />
+          <box size="${torso_x} ${torso_y} ${pcb_thickness_z}" />
         </geometry>
       </visual>
     </link>
@@ -56,23 +56,23 @@
 
 
   <!-- Leg Link Definition -->
-  <xacro:macro name="millihex_leg_link" params="leg_number link_number link_mass x_length y_length z_length">
+  <xacro:macro name="millihex_leg_link" params="leg_number link_number x_length y_length">
     <link name="leg${leg_number}_link${link_number}">
       <inertial>
-        <origin xyz="0 0 ${z_length / 2}" rpy="0 0 0" />
-        <mass value="0.01" />
-        <xacro:box_inertia mass="0.0008" x="${x_length}" y="${y_length}" z="${z_length}" />
+        <origin xyz="0 0 ${pcb_thickness_z / 2}" rpy="0 0 0" />
+        <mass value="${leg_link_mass}" />
+        <xacro:box_inertia mass="0.0008" x="${x_length}" y="${y_length}" z="${pcb_thickness_z}" />
       </inertial>
       <collision>
-        <origin xyz="0 0 0.00025" rpy="0 0 0"/>
+        <origin xyz="0 0 ${pcb_thickness_z / 2}" rpy="0 0 0"/>
         <geometry>
-          <box size="0.02 0.03 0.0005" />
+          <box size="${x_length} ${y_length} ${pcb_thickness_z}" />
         </geometry>
       </collision>
       <visual>
         <origin rpy="0 0 0" xyz="0 0 0"/>
         <geometry>
-          <box size="0.02 0.03 0.0005" />
+          <box size="${x_length} ${y_length} ${pcb_thickness_z}" />
         </geometry>
       </visual>
     </link>
