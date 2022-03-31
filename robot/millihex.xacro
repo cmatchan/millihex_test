@@ -15,6 +15,15 @@
   <xacro:property name="foot_mu2" value="10.0" />
 
 
+  <!-- Colors -->
+  <material name="Black">
+    <color rgba="0 0 0 1"/>
+  </material>
+  <material name="Orange">
+    <color rgba="0.945 0.35 0.133 1"/>
+  </material>
+
+
   <!-- Calculate Moment of Inertia of Box -->
   <xacro:macro name="box_inertia" params="mass x y z">
     <inertia ixx="${mass*(y*y+z*z)/12}" ixy = "0" ixz = "0"
@@ -45,6 +54,7 @@
         <geometry>
           <box size="${torso_x} ${torso_y} ${pcb_thickness_z}" />
         </geometry>
+        <material name="${color}"/>
       </visual>
     </link>
 
@@ -82,6 +92,7 @@
         <geometry>
           <box size="${x_length} ${y_length} ${pcb_thickness_z}" />
         </geometry>
+        <material name="${color}"/>
       </visual>
     </link>
 
@@ -127,7 +138,7 @@
       <child link="leg${leg_number}_link2" />
       <origin xyz="0 -${leg_link_y} 0" rpy="0 0 0" />
       <limit lower="-1.5708" upper="1.5708" effort="1" velocity="1"/>
-      <axis xyz="0 1 0" />
+      <axis xyz="1 0 0" />
     </joint>
 
     <xacro:leg_transmission leg_number="${leg_number}" joint_number="2" />
