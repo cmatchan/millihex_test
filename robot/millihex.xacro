@@ -124,7 +124,7 @@
   <xacro:macro name="millihex_body" params="">
     <xacro:millihex_torso />
     <xacro:millihex_leg leg_number="1" />
-    
+
     <joint name="leg1_joint1" type="fixed">
       <parent link="torso" />
       <child link="leg1_link1" />
@@ -145,7 +145,6 @@
   
 
   <!-- Build Robot by Filling in Macro Parameters -->
-  <xacro:millihex_torso />
   <xacro:millihex_body />
 
   <xacro:millihex_control namespace="millihex" />
