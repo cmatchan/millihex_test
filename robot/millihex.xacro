@@ -55,8 +55,8 @@
   </xacro:macro>
 
 
-  <!-- Leg Definition -->
-  <xacro:macro name="shoulder" params="number">
+  <!-- Leg Link Definition -->
+  <xacro:macro name="millihex_link" params="number">
     <link name="shoulder${number}">
       <inertial>
         <origin xyz="0 0 0.00025" rpy="0 0 0" />
@@ -66,16 +66,27 @@
       <collision>
         <origin xyz="0 0 0.00025" rpy="0 0 0"/>
         <geometry>
-          <box size="0.14 0.04 0.0005" />
+          <box size="0.03 0.02 0.0005" />
         </geometry>
       </collision>
       <visual>
-        <origin rpy="0.0 0 0" xyz="0 0 0"/>
+        <origin rpy="0 0 0" xyz="0 0 0"/>
         <geometry>
-          <box size="0.14 0.04 0.0005" />
+          <box size="0.03 0.02 0.0005" />
         </geometry>
       </visual>
     </link>
+  </xacro:macro>
+
+  <!-- Assemble Body -->
+  <xacro:macro name="millihex_body" params="">
+
+  </xacro:macro>
+
+
+  <!-- Assemble Leg -->
+  <xacro:macro name="millihex_leg" params="">
+
   </xacro:macro>
 
 
