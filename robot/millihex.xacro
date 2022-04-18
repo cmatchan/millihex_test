@@ -111,7 +111,7 @@
     <transmission name="leg${leg_number}_joint${joint_number}_tran">
       <type>transmission_interface/SimpleTransmission</type>
       <joint name="leg${leg_number}_joint${joint_number}">
-        <hardwareInterface>EffortJointInterface</hardwareInterface>
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
       </joint>
       <actuator name="leg${leg_number}_joint${joint_number}_motor">
         <hardwareInterface>EffortJointInterface</hardwareInterface>
