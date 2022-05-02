@@ -11,8 +11,8 @@
   <xacro:property name="pcb_thickness_z" value="0.0005" />
 	<xacro:property name="foot_kp" value="1000.0" />
 	<xacro:property name="foot_kd" value="1000.0" />
-	<xacro:property name="foot_mu1" value="0.2" />
-  <xacro:property name="foot_mu2" value="0.2" />
+	<xacro:property name="foot_mu1" value="0.5" />
+  <xacro:property name="foot_mu2" value="0.5" />
 
 
   <!-- Colors -->
