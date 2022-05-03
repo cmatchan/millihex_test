@@ -185,7 +185,6 @@
 
         <!-- Leg 1-->
         <xacro:millihex_leg leg_number="1" />
-
         <!-- Leg 1, Joint 0 (fixed, shoulder joint)-->
         <joint name="leg1_joint0" type="fixed">
             <parent link="torso" />
@@ -195,7 +194,6 @@
 
         <!-- Leg 2 -->
         <xacro:millihex_leg leg_number="2" />
-
         <!-- Leg 2, Joint 0 (fixed, shoulder joint) -->
         <joint name="leg2_joint0" type="fixed">
             <parent link="torso" />
@@ -204,19 +202,21 @@
         </joint>
 
         <!-- Leg 3 -->
-
+        <xacro:millihex_leg leg_number="3" />
         <!-- Leg 3, Joint 0 (fixed, shoulder joint) -->
+        <joint name="leg3_joint0" type="fixed">
+            <parent link="torso" />
+            <child link="leg3_link0" />
+            <origin xyz="-${torso_x / 2 - leg_link_x} -${torso_y / 2} 0" rpy="0 0 0" />
+        </joint>
 
         <!-- Leg 4 -->
-
         <!-- Leg 4, Joint 0 (fixed, shoulder joint) -->
 
         <!-- Leg 5 -->
-
         <!-- Leg 5, Joint 0 (fixed, shoulder joint) -->
 
         <!-- Leg 6 -->
-
         <!-- Leg 6, Joint 0 (fixed, shoulder joint) -->
     
     </xacro:macro>
