@@ -11,6 +11,7 @@
             leg1_joint1_position_controller leg1_joint2_position_controller leg1_joint3_position_controller
             leg2_joint1_position_controller leg2_joint2_position_controller leg2_joint3_position_controller
             leg3_joint1_position_controller leg3_joint2_position_controller leg3_joint3_position_controller
+            leg4_joint1_position_controller leg4_joint2_position_controller leg4_joint3_position_controller
             " />
 
     <!-- convert joint states to TF transforms for rviz, etc -->
