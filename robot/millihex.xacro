@@ -129,51 +129,51 @@
   
     <!-- Assemble Leg -->
     <xacro:macro name="millihex_leg" params="leg_number">
-        <!-- Link 1 (shoulder link), horizontally oriented -->
-        <xacro:millihex_leg_link leg_number="${leg_number}" link_number="1"
+        <!-- Link 0 (shoulder link), horizontally oriented -->
+        <xacro:millihex_leg_link leg_number="${leg_number}" link_number="0"
             x_length="${leg_link_x}" y_length="${leg_link_y}" color="Black" />
 
-        <!-- Link 2, vertically oriented -->
-        <xacro:millihex_leg_link leg_number="${leg_number}" link_number="2"
+        <!-- Link 1, vertically oriented -->
+        <xacro:millihex_leg_link leg_number="${leg_number}" link_number="1"
             x_length="${leg_link_y}" y_length="${leg_link_x}" color="Orange" />
+
+        <joint name="leg${leg_number}_joint1" type="revolute">
+            <parent link="leg${leg_number}_link0" />
+            <child link="leg${leg_number}_link1" />
+            <origin xyz="0 -${leg_link_y} 0" rpy="0 0 0" />
+            <limit lower="-1.5708" upper="1.5708" effort="0.01" velocity="0.0001"/>
+            <axis xyz="1 0 0" />
+        </joint>
+
+        <xacro:leg_transmission leg_number="${leg_number}" joint_number="1" />
+
+        <!-- Link 2, horizontally oriented -->
+        <xacro:millihex_leg_link leg_number="${leg_number}" link_number="2"
+            x_length="${leg_link_x}" y_length="${leg_link_y}" color="Black" />
 
         <joint name="leg${leg_number}_joint2" type="revolute">
             <parent link="leg${leg_number}_link1" />
             <child link="leg${leg_number}_link2" />
-            <origin xyz="0 -${leg_link_y} 0" rpy="0 0 0" />
+            <origin xyz="-${leg_link_y} 0 0" rpy="0 0 0" />
             <limit lower="-1.5708" upper="1.5708" effort="0.01" velocity="0.0001"/>
-            <axis xyz="1 0 0" />
+            <axis xyz="0 1 0" />
         </joint>
 
         <xacro:leg_transmission leg_number="${leg_number}" joint_number="2" />
 
         <!-- Link 3, horizontally oriented -->
         <xacro:millihex_leg_link leg_number="${leg_number}" link_number="3"
-            x_length="${leg_link_x}" y_length="${leg_link_y}" color="Black" />
+            x_length="${leg_link_x}" y_length="${leg_link_y}" color="Orange" />
 
         <joint name="leg${leg_number}_joint3" type="revolute">
             <parent link="leg${leg_number}_link2" />
             <child link="leg${leg_number}_link3" />
-            <origin xyz="-${leg_link_y} 0 0" rpy="0 0 0" />
-            <limit lower="-1.5708" upper="1.5708" effort="0.01" velocity="0.0001"/>
-            <axis xyz="0 1 0" />
-        </joint>
-
-        <xacro:leg_transmission leg_number="${leg_number}" joint_number="3" />
-
-        <!-- Link 4, horizontally oriented -->
-        <xacro:millihex_leg_link leg_number="${leg_number}" link_number="4"
-            x_length="${leg_link_x}" y_length="${leg_link_y}" color="Orange" />
-
-        <joint name="leg${leg_number}_joint4" type="revolute">
-            <parent link="leg${leg_number}_link3" />
-            <child link="leg${leg_number}_link4" />
             <origin xyz="0 -${leg_link_y} 0" rpy="0 0 0" />
             <limit lower="-1.5708" upper="1.5708" effort="0.01" velocity="0.0001"/>
             <axis xyz="1 0 0" />
         </joint>
 
-        <xacro:leg_transmission leg_number="${leg_number}" joint_number="4" />
+        <xacro:leg_transmission leg_number="${leg_number}" joint_number="3" />
 
     </xacro:macro>
 
@@ -186,38 +186,38 @@
         <!-- Leg 1-->
         <xacro:millihex_leg leg_number="1" />
 
-        <!-- Joint 1 -->
-        <joint name="leg1_joint1" type="fixed">
+        <!-- Leg 1, Joint 0 (fixed, shoulder joint)-->
+        <joint name="leg1_joint0" type="fixed">
             <parent link="torso" />
-            <child link="leg1_link1" />
+            <child link="leg1_link0" />
             <origin xyz="${torso_x / 2} -${torso_y / 2} 0" rpy="0 0 0" />
         </joint>
 
         <!-- Leg 2 -->
         <xacro:millihex_leg leg_number="2" />
 
-        <!-- Leg 2, Joint 1 -->
-        <joint name="leg2_joint1" type="fixed">
+        <!-- Leg 2, Joint 0 (fixed, shoulder joint) -->
+        <joint name="leg2_joint0" type="fixed">
             <parent link="torso" />
-            <child link="leg2_link1" />
+            <child link="leg2_link0" />
             <origin xyz="${leg_link_x / 2} -${torso_y / 2} 0" rpy="0 0 0" />
         </joint>
 
         <!-- Leg 3 -->
 
-        <!-- Leg 3, Joint 1 -->
+        <!-- Leg 3, Joint 0 (fixed, shoulder joint) -->
 
         <!-- Leg 4 -->
 
-        <!-- Leg 4, Joint 1 -->
+        <!-- Leg 4, Joint 0 (fixed, shoulder joint) -->
 
         <!-- Leg 5 -->
 
-        <!-- Leg 5, Joint 1 -->
+        <!-- Leg 5, Joint 0 (fixed, shoulder joint) -->
 
         <!-- Leg 6 -->
 
-        <!-- Leg 6, Joint 1 -->
+        <!-- Leg 6, Joint 0 (fixed, shoulder joint) -->
     
     </xacro:macro>
 
