@@ -82,7 +82,7 @@
         <xacro:box_inertia mass="${leg_link_mass}" x="${x_length}" y="${y_length}" z="${pcb_thickness_z}" />
       </inertial>
       <collision>
-        <origin xyz="0 0 ${pcb_thickness_z / 2}" rpy="0 0 0"/>
+        <origin xyz="-${x_length / 2} -${y_length / 2} 0" rpy="0 0 0"/>
         <geometry>
           <box size="${x_length} ${y_length} ${pcb_thickness_z}" />
         </geometry>
