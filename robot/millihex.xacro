@@ -183,15 +183,42 @@
         <!-- Call Torso xacro -->
         <xacro:millihex_torso color="Orange" />
 
-        <!-- Define Leg 1-->
+        <!-- Leg 1-->
         <xacro:millihex_leg leg_number="1" />
 
-        <!-- Joint 1, Leg1 Link1-->
+        <!-- Joint 1 -->
         <joint name="leg1_joint1" type="fixed">
             <parent link="torso" />
             <child link="leg1_link1" />
             <origin xyz="${torso_x / 2} -${torso_y / 2} 0" rpy="0 0 0" />
         </joint>
+
+        <!-- Leg 2 -->
+        <xacro:millihex_leg leg_number="2" />
+
+        <!-- Leg 2, Joint 1 -->
+        <joint name="leg2_joint1" type="fixed">
+            <parent link="torso" />
+            <child link="leg2_link1" />
+            <origin xyz="${leg_link_x / 2} -${torso_y / 2} 0" rpy="0 0 0" />
+        </joint>
+
+        <!-- Leg 3 -->
+
+        <!-- Leg 3, Joint 1 -->
+
+        <!-- Leg 4 -->
+
+        <!-- Leg 4, Joint 1 -->
+
+        <!-- Leg 5 -->
+
+        <!-- Leg 5, Joint 1 -->
+
+        <!-- Leg 6 -->
+
+        <!-- Leg 6, Joint 1 -->
+    
     </xacro:macro>
 
 
