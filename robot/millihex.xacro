@@ -211,7 +211,13 @@
         </joint>
 
         <!-- Leg 4 -->
+        <xacro:millihex_leg leg_number="4" />
         <!-- Leg 4, Joint 0 (fixed, shoulder joint) -->
+        <joint name="leg4_joint0" type="fixed">
+            <parent link="torso" />
+            <child link="leg4_link0" />
+            <origin xyz="${torso_x / 2} ${torso_y / 2} 0" rpy="3.1416 0 0" />
+        </joint>
 
         <!-- Leg 5 -->
         <!-- Leg 5, Joint 0 (fixed, shoulder joint) -->
