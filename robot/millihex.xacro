@@ -161,7 +161,19 @@
 
         <xacro:leg_transmission leg_number="${leg_number}" joint_number="3" />
 
-        <!-- TODO: Link 4, horizontally oriented -->
+        <!-- Link 4, horizontally oriented -->
+        <xacro:millihex_leg_link leg_number="${leg_number}" link_number="4"
+            x_length="${leg_link_x}" y_length="${leg_link_y}" color="Orange" />
+
+        <joint name="leg${leg_number}_joint4" type="revolute">
+            <parent link="leg${leg_number}_link3" />
+            <child link="leg${leg_number}_link4" />
+            <origin xyz="0 -${leg_link_y} 0" rpy="0 0 0" />
+            <limit lower="-1.5708" upper="1.5708" effort="0.01" velocity="0.0001"/>
+            <axis xyz="1 0 0" />
+        </joint>
+
+        <xacro:leg_transmission leg_number="${leg_number}" joint_number="4" />
 
     </xacro:macro>
 
