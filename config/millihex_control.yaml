@@ -75,7 +75,7 @@ millihex:
     joint: leg5_joint1
     pid: {p: 0.1, i: 0.0, d: 0.0}
 
-  leg4_joint2_position_controller:
+  leg5_joint2_position_controller:
     type: effort_controllers/JointPositionController
     joint: leg5_joint2
     pid: {p: 0.1, i: 0.0, d: 0.0}
@@ -83,6 +83,22 @@ millihex:
   leg5_joint3_position_controller:
     type: effort_controllers/JointPositionController
     joint: leg5_joint3
+    pid: {p: 0.1, i: 0.0, d: 0.0}
+
+  # Leg 6
+  leg6_joint1_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: leg6_joint1
+    pid: {p: 0.1, i: 0.0, d: 0.0}
+
+  leg6_joint2_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: leg6_joint2
+    pid: {p: 0.1, i: 0.0, d: 0.0}
+
+  leg6_joint3_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: leg6_joint3
     pid: {p: 0.1, i: 0.0, d: 0.0}
 
   # To add more just add them here as the first one
