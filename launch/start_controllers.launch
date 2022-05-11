@@ -21,4 +21,8 @@
         respawn="false" output="screen">
         <remap from="/joint_states" to="/millihex/joint_states" />
     </node>
+
+    <!-- start walking demo python script -->
+    <node name="millihex_walker" pkg="millihex_test" type="walker_demo.py" output="screen" />
+
 </launch>
