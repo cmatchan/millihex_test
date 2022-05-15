@@ -23,6 +23,7 @@
     </node>
 
     <!-- start walking demo python script -->
-    <node name="millihex_walker" pkg="millihex_test" type="walker_demo.py" output="screen" />
+    <node name="millihex_walker_publisher" pkg="millihex_test" type="walker_publisher.py" output="screen" />
+    <node name="millihex_walker_listener" pkg="millihex_test" type="walker_listener.py" output="screen" />
 
 </launch>
