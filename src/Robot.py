@@ -4,7 +4,6 @@ import rospy
 from std_msgs.msg import Float64
 from sensor_msgs.msg import JointState
 
-
 class Robot:
     def __init__(self):
         """Initialize ROS publisher & ROS subscriber"""
@@ -20,7 +19,7 @@ class Robot:
     def callback(self, ros_data):
         """Subscriber callback function of joint_states topic
         Here joint state positions are updated"""
-        print("Joint Position: %s", ros_data.position)
+        self.position = ros_data.position
         rate = rospy.Rate(0.5)
         rate.sleep()
 
