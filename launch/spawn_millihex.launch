@@ -16,12 +16,13 @@
 
     <!-- Run a python script to the send a service call to gazebo_ros to spawn a URDF robot -->
     <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
-        args="-urdf -x $(arg x) -y $(arg y) -z $(arg z)  -model $(arg robot_name) -param robot_description"/>
+        args="-urdf -x $(arg x) -y $(arg y) -z $(arg z)  -model $(arg robot_name) -param robot_description" />
 
     <!-- Launch robot joint controllers -->
     <include file="$(find millihex_test)/launch/start_controllers.launch" />
 
     <!-- start walking demo publisher and listener scripts -->
     <!--node name="millihex_walker_publisher" pkg="millihex_test" type="walker_publisher.py" output="screen" /-->
+    <!--node name="millihex_joint_test" pkg="millihex_test" type="joint.py" output="screen" /-->
 
 </launch>
