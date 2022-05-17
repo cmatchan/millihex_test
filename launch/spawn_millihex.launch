@@ -21,4 +21,7 @@
     <!-- Launch robot joint controllers -->
     <include file="$(find millihex_test)/launch/start_controllers.launch" />
 
+    <!-- start walking demo publisher and listener scripts -->
+    <!--node name="millihex_walker_publisher" pkg="millihex_test" type="walker_publisher.py" output="screen" /-->
+
 </launch>
