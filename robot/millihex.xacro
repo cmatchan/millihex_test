@@ -169,6 +169,7 @@
                    upper="${joint_upper_limit}"
                    effort="${joint_effort_limit}"
                    velocity="${joint_velocity_limit}" />
+            <dynamics damping="${joint_damping}" friction="${joint_friction}" />
             <axis xyz="1 0 0" />
         </joint>
 
@@ -186,6 +187,7 @@
                    upper="${joint_upper_limit}"
                    effort="${joint_effort_limit}"
                    velocity="${joint_velocity_limit}" />
+            <dynamics damping="${joint_damping}" friction="${joint_friction}" />
             <axis xyz="0 1 0" />
         </joint>
 
@@ -203,6 +205,7 @@
                    upper="${joint_upper_limit}"
                    effort="${joint_effort_limit}"
                    velocity="${joint_velocity_limit}" />
+            <dynamics damping="${joint_damping}" friction="${joint_friction}" />
             <axis xyz="1 0 0" />
         </joint>
 
