@@ -2,23 +2,34 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="millihex">
 
     <!-- Physical Properties -->
+    <!-- Torso mass and x,y dimensions -->
     <xacro:property name="torso_mass" value="0.01" />
     <xacro:property name="torso_x" value="0.14" />
     <xacro:property name="torso_y" value="0.04" />
+
+    <!-- Leg mass and x,y dimensions -->
     <xacro:property name="leg_link_mass" value="0.0008" />
     <xacro:property name="leg_link_x" value="0.02" />
     <xacro:property name="leg_link_y" value="0.03" />
+
+    <!-- Joint limits -->
     <xacro:property name="joint_upper_limit" value="1.5708" />
     <xacro:property name="joint_lower_limit" value="-1.5708" />
     <xacro:property name="joint_effort_limit" value="0.01" />
     <xacro:property name="joint_velocity_limit" value="0.01" />
+
+    <!-- Joint damping (b) and friction (k) -->
+    <xacro:property name="joint_damping" value="" />
+    <xacro:property name="joint_friction" value="" />
+
+    <!-- PCB thickness -->
     <xacro:property name="pcb_thickness_z" value="0.0005" />
+
+    <!-- Foot friction values -->
     <xacro:property name="foot_kp" value="1000.0" />
     <xacro:property name="foot_kd" value="1.0" />
     <xacro:property name="foot_mu1" value="0.5" />
     <xacro:property name="foot_mu2" value="0.5" />
-    <xacro:property name="joint_damping" value="" />
-    <xacro:property name="joint_friction" value="" />
 
 
     <!-- Color Definitions -->
