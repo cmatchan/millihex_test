@@ -8,9 +8,10 @@
     <xacro:property name="leg_link_mass" value="0.0008" />
     <xacro:property name="leg_link_x" value="0.02" />
     <xacro:property name="leg_link_y" value="0.03" />
-    <xacro:property name="joint_limit" value="1.5708" />
-    <xacro:property name="joint_effort" value="0.01" />
-    <xacro:property name="joint_velocity" value="0.01" />
+    <xacro:property name="joint_upper_limit" value="1.5708" />
+    <xacro:property name="joint_lower_limit" value="-1.5708" />
+    <xacro:property name="joint_effort_limit" value="0.01" />
+    <xacro:property name="joint_velocity_limit" value="0.01" />
     <xacro:property name="pcb_thickness_z" value="0.0005" />
     <xacro:property name="foot_kp" value="1000.0" />
     <xacro:property name="foot_kd" value="1.0" />
@@ -133,7 +134,7 @@
                 <hardwareInterface>
                     hardware_interface/EffortJointInterface
                 </hardwareInterface>
-                <mechanicalReduction>50</mechanicalReduction>
+                <mechanicalReduction>1</mechanicalReduction>
             </actuator>
         </transmission>
     </xacro:macro>
@@ -153,8 +154,10 @@
             <parent link="leg${leg_number}_link0" />
             <child link="leg${leg_number}_link1" />
             <origin xyz="0 -${leg_link_y} 0" rpy="0 0 0" />
-            <limit lower="-${joint_limit}" upper="${joint_limit}"
-                effort="${joint_effort}" velocity="${joint_velocity}" />
+            <limit lower="${joint_lower_limit}"
+                   upper="${joint_upper_limit}"
+                   effort="${joint_effort_limit}"
+                   velocity="${joint_velocity_limit}" />
             <axis xyz="1 0 0" />
         </joint>
 
@@ -168,8 +171,10 @@
             <parent link="leg${leg_number}_link1" />
             <child link="leg${leg_number}_link2" />
             <origin xyz="-${leg_link_y} 0 0" rpy="0 0 0" />
-            <limit lower="-${joint_limit}" upper="${joint_limit}"
-                effort="${joint_effort}" velocity="${joint_velocity}" />
+            <limit lower="${joint_lower_limit}"
+                   upper="${joint_upper_limit}"
+                   effort="${joint_effort_limit}"
+                   velocity="${joint_velocity_limit}" />
             <axis xyz="0 1 0" />
         </joint>
 
@@ -183,8 +188,10 @@
             <parent link="leg${leg_number}_link2" />
             <child link="leg${leg_number}_link3" />
             <origin xyz="0 -${leg_link_y} 0" rpy="0 0 0" />
-            <limit lower="-${joint_limit}" upper="${joint_limit}"
-                effort="${joint_effort}" velocity="${joint_velocity}" />
+            <limit lower="${joint_lower_limit}"
+                   upper="${joint_upper_limit}"
+                   effort="${joint_effort_limit}"
+                   velocity="${joint_velocity_limit}" />
             <axis xyz="1 0 0" />
         </joint>
 
