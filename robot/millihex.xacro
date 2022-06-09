@@ -10,21 +10,23 @@
     <xacro:property name="leg_link_y" value="0.03" />
     <xacro:property name="joint_limit" value="1.5708" />
     <xacro:property name="joint_effort" value="0.01" />
-    <xacro:property name="joint_velocity" value="0.0001" />
+    <xacro:property name="joint_velocity" value="0.01" />
     <xacro:property name="pcb_thickness_z" value="0.0005" />
     <xacro:property name="foot_kp" value="1000.0" />
-    <xacro:property name="foot_kd" value="1000.0" />
+    <xacro:property name="foot_kd" value="1.0" />
     <xacro:property name="foot_mu1" value="0.5" />
     <xacro:property name="foot_mu2" value="0.5" />
+    <xacro:property name="joint_damping" value="" />
+    <xacro:property name="joint_friction" value="" />
 
 
     <!-- Color Definitions -->
     <material name="Black">
-        <color rgba="0 0 0 1"/>
+        <color rgba="0 0 0 1" />
     </material>
 
     <material name="Orange">
-        <color rgba="0.98 0.41 0.055 1"/>
+        <color rgba="0.98 0.41 0.055 1" />
     </material>
 
 
@@ -50,7 +52,7 @@
                     y="${torso_y}" z="${pcb_thickness_z}" />
             </inertial>
             <collision>
-                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <origin xyz="0 0 0" rpy="0 0 0" />
                 <geometry>
                     <box size="${torso_x} ${torso_y} ${pcb_thickness_z}" />
                 </geometry>
@@ -60,7 +62,7 @@
                 <geometry>
                     <box size="${torso_x} ${torso_y} ${pcb_thickness_z}" />
                 </geometry>
-                <material name="${color}"/>
+                <material name="${color}" />
             </visual>
         </link>
 
@@ -75,8 +77,8 @@
 
         <!-- Join Base Link and Torso -->
         <joint name="base_joint" type="fixed">
-            <parent link="base_link"/>
-            <child link="torso"/>
+            <parent link="base_link" />
+            <child link="torso" />
         </joint>
     </xacro:macro>
 
@@ -93,7 +95,7 @@
                     y="${y_length}" z="${pcb_thickness_z}" />
             </inertial>
             <collision>
-                <origin xyz="-${x_length / 2} -${y_length / 2} 0" rpy="0 0 0"/>
+                <origin xyz="-${x_length / 2} -${y_length / 2} 0" rpy="0 0 0" />
                 <geometry>
                     <box size="${x_length} ${y_length} ${pcb_thickness_z}" />
                 </geometry>
@@ -128,8 +130,10 @@
                 </hardwareInterface>
             </joint>
             <actuator name="leg${leg_number}_joint${joint_number}_motor">
-                <hardwareInterface>EffortJointInterface</hardwareInterface>
-                <mechanicalReduction>1</mechanicalReduction>
+                <hardwareInterface>
+                    hardware_interface/EffortJointInterface
+                </hardwareInterface>
+                <mechanicalReduction>50</mechanicalReduction>
             </actuator>
         </transmission>
     </xacro:macro>
@@ -150,7 +154,7 @@
             <child link="leg${leg_number}_link1" />
             <origin xyz="0 -${leg_link_y} 0" rpy="0 0 0" />
             <limit lower="-${joint_limit}" upper="${joint_limit}"
-                effort="${joint_effort}" velocity="${joint_velocity}"/>
+                effort="${joint_effort}" velocity="${joint_velocity}" />
             <axis xyz="1 0 0" />
         </joint>
 
@@ -165,7 +169,7 @@
             <child link="leg${leg_number}_link2" />
             <origin xyz="-${leg_link_y} 0 0" rpy="0 0 0" />
             <limit lower="-${joint_limit}" upper="${joint_limit}"
-                effort="${joint_effort}" velocity="${joint_velocity}"/>
+                effort="${joint_effort}" velocity="${joint_velocity}" />
             <axis xyz="0 1 0" />
         </joint>
 
@@ -180,7 +184,7 @@
             <child link="leg${leg_number}_link3" />
             <origin xyz="0 -${leg_link_y} 0" rpy="0 0 0" />
             <limit lower="-${joint_limit}" upper="${joint_limit}"
-                effort="${joint_effort}" velocity="${joint_velocity}"/>
+                effort="${joint_effort}" velocity="${joint_velocity}" />
             <axis xyz="1 0 0" />
         </joint>
 
