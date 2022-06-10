@@ -1,0 +1,2 @@
+# ignore __pycache__ file in src folder
+src/__pycache__/
