@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-import sys
 import rospy
 from std_msgs.msg import Float64
 from sensor_msgs.msg import JointState
@@ -7,21 +6,12 @@ from sensor_msgs.msg import JointState
 class Robot:
     def __init__(self, num_legs, joints_per_leg):
         """Initialize ROS publishers & ROS subscribers"""
-        # Initialize all joint position controllers for command topic
-        start_all_joint_position_controller_publishers()
 
-        # Subscribe to millihex/joint_states topic
-        self.subscriber = rospy.Subscriber("/millihex/joint_states", \
-            JointState, self.callback)
-
-        # Stores robot joint positions
-        self.joint_positions = Float64()
-    
         def start_all_joint_position_controller_publishers(self):
             """ Initialize joint publishers for the topic
             /millihex/leg#_joint#_position_controller/command """
-            for i in range(self.num_legs):
-                for j in range(self.joints_per_leg):
+            for i in range(num_legs):
+                for j in range(joints_per_leg):
                     leg_number = i+1        # Robot leg indexes from 1
                     joint_number = j+1      # Robot joint indexes from 1
 
@@ -37,23 +27,34 @@ class Robot:
                         f"rospy.Publisher('{publisher_topic}', Float64, queue_size=1, latch=True)"
 
                     exec(start_publisher_command)       # Execute string as a function
+        
+        # Initialize all joint position controllers for command topic
+        start_all_joint_position_controller_publishers(self)
+
+        # Subscribe to millihex/joint_states topic
+        self.subscriber = rospy.Subscriber("/millihex/joint_states", \
+            JointState, self.callback)
+
+        # Stores robot joint positions
+        self.joint_positions = Float64()
 
 
     def callback(self, ros_data):
         """Subscriber callback function of /millihex/joint_states topic.
         Here, the joint state positions are updated every 2 seconds."""
-        self.joint_positions = ros_data.position        # stored as a tuple
-        rate = rospy.Rate(0.5)                          # update every 2 sec
+        self.joint_positions = ros_data.position        # Joint positions stored as tuple
+        rate = rospy.Rate(0.5)                          # Update every 2 sec
         rate.sleep()
 
 
     def get_single_joint_position(self, leg_number, joint_number):
-        # TODO
-        pass
+        """Returns position of joint_number in leg_number"""
+        joint_index = (leg_number - 1) * self.joints_per_leg + (joint_number - 1)
+        return self.joint_positions[joint_index]
 
 
     def get_all_joint_positions(self):
-        """Returns current joint positions of robot"""
+        """Returns all joint positions of robot"""
         return self.joint_positions
 
 
@@ -65,8 +66,9 @@ class Robot:
         # Publish joint_position to joint publisher
         publish_command = f"self.{publisher_name}.publish({joint_position})"
 
-        print(f"publish_command = {publish_command}")
         exec(publish_command)       # Execute string as a function
+
+        # print(f"publish_command = {publish_command}")
 
 
     def publish_all_joints_position(self, joint_position):
