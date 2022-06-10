@@ -7,10 +7,11 @@ def main():
     """Initializes ROS node for robot"""
     try:
         rospy.init_node('robot_definition', anonymous=True)
-        millihex = Robot()
         rate = rospy.Rate(0.5)
+
         num_legs = 6
         joints_per_leg = 3
+        millihex = Robot(num_legs, joints_per_leg)
 
         for i in range(num_legs):
             for j in range(joints_per_leg):
