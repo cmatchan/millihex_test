@@ -5,14 +5,14 @@ from sensor_msgs.msg import JointState
 
 class Robot:
     def __init__(self, num_legs, joints_per_leg):
-        """Initialize ROS publishers & ROS subscribers"""
+        """Initialize ROS publishers & ROS subscribers."""
         self.num_legs = num_legs
         self.joints_per_leg = joints_per_leg
         self.num_joint_publishers = 0       # Number of joint publishers started
 
         def start_joint_position_controller_publishers(self):
-            """ Initialize joint publishers for the topic
-            /millihex/leg#_joint#_position_controller/command """
+            """Initialize joint publishers for the topic
+            /millihex/leg#_joint#_position_controller/command."""
             for i in range(self.num_legs):
                 for j in range(self.joints_per_leg):
                     leg_number = i+1        # Robot leg indexes from 1
@@ -51,8 +51,7 @@ class Robot:
 
 
     def callback(self, ros_data):
-        """Subscriber callback function of /millihex/joint_states topic.
-        Here, the joint state positions are updated every 2 seconds."""
+        """Subscriber callback function of /millihex/joint_states topic."""
         self.joint_positions = ros_data.position        # Joint positions stored as tuple
         # print(f"Subscriber callback = {self.joint_positions}\n")
         rate = rospy.Rate(1)
@@ -60,18 +59,18 @@ class Robot:
 
 
     def get_joint_position(self, leg_number, joint_number):
-        """Returns position of joint_number in leg_number"""
+        """Returns the current position of joint_number in leg_number."""
         joint_index = (leg_number - 1) * self.joints_per_leg + (joint_number - 1)
         return self.joint_positions[joint_index]
 
 
     def get_all_joint_positions(self):
-        """Returns all joint positions of robot"""
+        """Returns a tuple of all robot joint positions."""
         return self.joint_positions
 
 
     def set_joint_position(self, leg_number, joint_number, joint_position):
-        """Publishes new joint_position to specified leg_number, joint_number."""
+        """Publishes joint_position to specified leg_number, joint_number."""
         # Name of joint publisher = "leg#_joint#_pub"
         publisher_name = f"leg{leg_number}_joint{joint_number}_pub"
 
@@ -81,14 +80,16 @@ class Robot:
         exec(publish_command)       # Execute string as a function
 
 
-    def set_all_joints_position(self, joint_position):
-        # TODO
-        pass
-    
-
     def robot_stance(self):
-        # TODO
-        pass
+        """Commands robot to stance phase."""
+        half_num_legs = (int) (self.num_legs / 2)
+        for i in range(half_num_legs):
+            for j in range(self.joints_per_leg):
+                leg_number = i+1        # Robot leg indexes from 1
+                joint_number = j+1      # Robot joint indexes from 1
+
+                self.set_joint_position(leg_number, joint_number, 0.6)
+                self.set_joint_position(leg_number + half_num_legs, joint_number, -0.6)
 
 
     def robot_leg_foward(self, leg_number):

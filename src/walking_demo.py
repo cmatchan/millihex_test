@@ -35,10 +35,9 @@ def main():
         
         rate.sleep()
     
-        # Test 
-        millihex.set_joint_position(1, 2, 1.3)
-        joint_position = millihex.get_joint_position(1,2)
-        print(f"leg1_link2 position = {joint_position}")
+        # Test
+        millihex.robot_stance()
+
 
         # # Testing loop
         # while not rospy.is_shutdown():
