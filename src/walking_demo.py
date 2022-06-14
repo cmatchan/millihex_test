@@ -31,12 +31,13 @@ def main():
                 joint_number = j+1              # Robot joint indexes from 1
 
                 # Set joint position = 0 to each joint in a leg
-                millihex.set_joint_position(leg_number, joint_number, 0)
+                joint_position = 0.0
+                millihex.set_joint_position(leg_number, joint_number, joint_position)
         
         rate.sleep()
     
         # Test
-        millihex.robot_stance()
+        millihex.stand_up()
 
 
         # # Testing loop

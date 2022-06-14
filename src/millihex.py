@@ -80,16 +80,48 @@ class Robot:
         exec(publish_command)       # Execute string as a function
 
 
-    def robot_stance(self):
-        """Commands robot to stance phase."""
-        half_num_legs = (int) (self.num_legs / 2)
-        for i in range(half_num_legs):
-            for j in range(self.joints_per_leg):
-                leg_number = i+1        # Robot leg indexes from 1
-                joint_number = j+1      # Robot joint indexes from 1
+    def leg_stance(self, leg_number, high_stance = 0):
+        """Commands leg to low or high stance position.
+        Low stance: high_stance = 0
+        High stance: high_stance = 1"""
+        joint_angle = 0.4       # Default to low stance joint angle
 
-                self.set_joint_position(leg_number, joint_number, 0.6)
-                self.set_joint_position(leg_number + half_num_legs, joint_number, -0.6)
+        # Change to higher joint angle for high stance
+        if high_stance == 1:
+            joint_angle = 0.8
+        else:
+            raise Exception("Input error: Use 0 for low stance, 1 for high stance")
+
+        # LHS leg joints have flipped axes
+        if leg_number > (int) (self.num_legs / 2):
+            joint_angle = (-1) * joint_angle
+
+        print(f"joint_angle = {joint_angle}")
+
+        # Use joints 1 and 3 for vertical positioning
+        self.set_joint_position(leg_number, 1, joint_angle)
+        self.set_joint_position(leg_number, 3, joint_angle)
+
+
+    def tripod_stance(self):
+        #TODO
+        pass
+
+    def leg_swing(self):
+        #TODO
+        pass
+
+
+    def stand_up(self):
+        """Commands robot to stand up with all legs in low stance position."""
+        for i in range(self.num_legs):
+            leg_number = i+1        # Robot leg indexes from 1
+            self.leg_stance(leg_number, high_stance = 1)
+    
+
+    def lay_down(self):
+        #TODO
+        pass
 
 
     def robot_leg_foward(self, leg_number):
