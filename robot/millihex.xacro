@@ -33,8 +33,8 @@
 
     <!-- Link coulomb friction coefficients in direction 1,2 -->
     <!-- mu = [0, inf] where higher mu means less slip -->
-    <xacro:property name="link_mu1" value="5.0" />
-    <xacro:property name="link_mu2" value="5.0" />
+    <xacro:property name="link_mu1" value="10.0" />
+    <xacro:property name="link_mu2" value="10.0" />
 
 
     <!-- Color Definitions -->
