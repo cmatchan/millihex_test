@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import rospy
+import numpy as np
 from std_msgs.msg import Float64
 from sensor_msgs.msg import JointState
 
@@ -15,8 +16,8 @@ class Robot:
             /millihex/leg#_joint#_position_controller/command."""
             for i in range(self.num_legs):
                 for j in range(self.joints_per_leg):
-                    leg_number = i+1        # Robot leg indexes from 1
-                    joint_number = j+1      # Robot joint indexes from 1
+                    leg_number = i + 1        # Robot leg indexes from 1
+                    joint_number = j + 1      # Robot joint indexes from 1
 
                     # Name of joint publisher = "leg#_joint#_pub"
                     publisher_name = f"leg{leg_number}_joint{joint_number}_pub"
@@ -46,21 +47,38 @@ class Robot:
         self.subscriber = rospy.Subscriber("/millihex/joint_states", \
             JointState, self.callback)
 
-        # Stores robot joint positions
-        self.joint_positions = Float64()
+        # Robot joint positions
+        # angles = [-pi/2, pi/2]
+        self.joint_positions = tuple()          
+
+        # Leg stance state = {-1, 0, 1}
+        # Lying down = -1
+        # Low stance = 0
+        # High stance = 1
+        self.stance_state = (-1) + np.zeros(self.num_legs)
+
+        # Leg swing state = {0, 1}
+        # Neutral = 0
+        # Forward swing = 1
+        self.swing_state = np.zeros(self.num_legs)      
 
 
     def callback(self, ros_data):
         """Subscriber callback function of /millihex/joint_states topic."""
-        self.joint_positions = ros_data.position        # Joint positions stored as tuple
-        # print(f"Subscriber callback = {self.joint_positions}\n")
+        self.joint_positions = ros_data.position    # Update joint positions
         rate = rospy.Rate(1)
         rate.sleep()
 
 
+    def get_joint_index(self, leg_number, joint_number):
+        """Computes the index of a given leg joint for a joint vector."""
+        joint_index = (leg_number - 1) * self.joints_per_leg + (joint_number - 1)
+        return joint_index
+
+
     def get_joint_position(self, leg_number, joint_number):
         """Returns the current position of joint_number in leg_number."""
-        joint_index = (leg_number - 1) * self.joints_per_leg + (joint_number - 1)
+        joint_index = self.get_joint_index(leg_number, joint_number)
         return self.joint_positions[joint_index]
 
 
@@ -80,50 +98,91 @@ class Robot:
         exec(publish_command)       # Execute string as a function
 
 
-    def leg_stance(self, leg_number, high_stance = 0):
-        """Commands leg to low or high stance position.
-        Low stance: high_stance = 0
-        High stance: high_stance = 1"""
-        joint_angle = 0.4       # Default to low stance joint angle
-
-        # Change to higher joint angle for high stance
-        if high_stance == 1:
-            joint_angle = 0.8
-        else:
-            raise Exception("Input error: Use 0 for low stance, 1 for high stance")
-
-        # LHS leg joints have flipped axes
-        if leg_number > (int) (self.num_legs / 2):
-            joint_angle = (-1) * joint_angle
-
-        print(f"joint_angle = {joint_angle}")
-
-        # Use joints 1 and 3 for vertical positioning
-        self.set_joint_position(leg_number, 1, joint_angle)
-        self.set_joint_position(leg_number, 3, joint_angle)
+    def get_stance_state(self):
+        """Returns stance state vector of robot joints."""
+        return self.stance_state
 
 
-    def tripod_stance(self):
-        #TODO
-        pass
+    def get_swing_state(self):
+        """Returns swing state vector of robot joints."""
+        return self.swing_state
 
-    def leg_swing(self):
-        #TODO
-        pass
+
+    def set_leg_stance(self, legs = [], stance = -1):
+        """Commands leg stance position.
+        Lay down: stance = -1
+        Low stance: stance = 0
+        High stance: stance = 1"""
+        for leg_number in legs:
+            if stance == 0:         # Set joint angle for low stance
+                joint_angle = 0.4
+            elif stance == 1:       # Set joint angle for high stance
+                joint_angle = 0.8
+            else:                   # Stance = -1, set leg to lie down
+                joint_angle = 0.0
+                self.set_joint_position(leg_number, 2, joint_angle)
+
+            self.stance_state[leg_number - 1] = stance
+
+            # LHS leg joints have flipped axes
+            if leg_number > (int) (self.num_legs / 2):
+                joint_angle = (-1) * joint_angle
+
+            # Use joints 1 and 3 for stance positioning
+            self.set_joint_position(leg_number, 1, joint_angle)
+            self.set_joint_position(leg_number, 3, joint_angle)
+
+    
+    def set_leg_swing(self, legs = [], swing = 0):
+        """Commands leg swing position.
+        Neutral: swing = 0
+        Swing forward: swing = 1"""
+        for leg_number in legs:
+            if swing == 1:          # Set joint angle to forward swing
+                joint_angle = 0.8
+            else:                   # Swing = 0, set to neutral swing
+                joint_angle = 0.0
+
+            self.swing_state[leg_number - 1] = swing
+
+            # LHS leg joints have flipped axes
+            if leg_number > (int) (self.num_legs / 2):
+                joint_angle = (-1) * joint_angle
+
+            # Use joint 2 for swing positioning
+            self.set_joint_position(leg_number, 2, joint_angle)
 
 
     def stand_up(self):
         """Commands robot to stand up with all legs in low stance position."""
-        for i in range(self.num_legs):
-            leg_number = i+1        # Robot leg indexes from 1
-            self.leg_stance(leg_number, high_stance = 1)
+        legs = np.arange(0,self.num_legs) + 1
+        self.set_leg_stance(legs, stance = 0)
     
 
     def lay_down(self):
-        #TODO
-        pass
+        """Commands robot to lay down flat."""
+        legs = np.arange(0,self.num_legs) + 1
+        self.set_leg_stance(legs, stance = -1)
 
 
-    def robot_leg_foward(self, leg_number):
-        # TODO
-        pass
+    def tripod_gait(self):
+        """Commands a High stance for Left or Right dominant side.
+        Dominant side stands up with front and back legs.
+        Opposite side stands up with middle leg."""
+        # If not in tripod gait, then make robot stand
+        # (Reset robot state to standing state)
+        if np.sum(self.stance_state) != 3:
+            self.stand_up()
+
+        # If robot in standing state, then start tripod gait
+        if np.sum(self.stance_state) == 0:
+            # Start Tripod gait as Right dominant stance
+            # stance state = [1 0 1 0 1 0]
+            for i in range(0, self.num_legs, 2):
+                leg_number = i + 1
+                self.set_leg_stance(leg_number, stance = 1)
+
+        # If robot is in Tripod stance, then swing opposite legs forward
+        if np.sum(self.stance_state) == 3:
+            for i in range(0, self.num_legs, 2):
+                self.set_leg_swing(leg_number, swing = 1)
